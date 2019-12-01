@@ -1,0 +1,5 @@
+root=postmaster
+mailhub=mail
+rewriteDomain=example.com
+hostname=example.com
+FromLineOverride=YES
