@@ -47,6 +47,8 @@ NETWORK=10.10.10
 
 ### 3. Add ReverseProxy setting
 
+#### For Apache
+
 * Add the following lines to the setting file for Apache running on the Docker host
   * `XXX.XXX.XXX` will be the same as the environment variable `NETWORK` in `.env`
 
@@ -59,3 +61,20 @@ RequestHeader set X-Forwarded-Proto https
 ProxyPass        /wiki http://XXX.XXX.XXX.2/wiki
 ProxyPassReverse /wiki http://XXX.XXX.XXX.2/wiki
 ```
+
+#### For Nginx
+
+```
+location ^~ /wiki/ {
+    proxy_pass http://XXX.XXX.XXX.2;
+}
+```
+
+* Note the priority of `location` settings
+  * priority
+    1. exact match `=`
+    1. explicit forward match `^~`
+    1. regular expression case sensitive `~`
+    1. regular expression case insensitive `~*`
+    1. implicit forward match
+  * See https://stackoverflow.com/questions/5238377/nginx-location-priority
