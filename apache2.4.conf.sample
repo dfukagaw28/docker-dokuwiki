@@ -1,0 +1,31 @@
+<VirtualHost *:80>
+        ServerName www.example.com
+        ServerAdmin webmaster@example.com
+        DocumentRoot /var/www/html
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        <Directory /var/www/html>
+                Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+                #AllowOverride FileInfo AuthConfig Limit Options
+        </Directory>
+
+        <Directory /var/www/html/wiki>
+                Require all granted
+                <FilesMatch "^([\._]ht|README$|VERSION$|COPYING$)">
+                        Require all denied
+                </FilesMatch>
+                <Files install.php>
+                        Require all denied
+                </Files>
+
+                #<RequireAny>
+                #       Require local
+                #       Require ip xxx.xxx.xxx.xxx/xx
+                #</RequireAny>
+        </Directory>
+
+        <DirectoryMatch "/var/www/html/wiki/(\.git|data|conf|bin|inc)">
+                Require all denied
+        </DirectoryMatch>
+</VirtualHost>
