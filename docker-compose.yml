@@ -1,0 +1,30 @@
+version: '2'
+services:
+  dokuwiki:
+    build:
+      context: dokuwiki
+    restart: always
+    volumes:
+      - conf:/var/www/html/wiki/conf
+      - data:/var/www/html/wiki/data
+      - plugins:/var/www/html/wiki/lib/plugins
+      - ./apache2.4.conf:/etc/apache2/sites-enabled/000-default.conf:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./ssmtp.conf:/etc/ssmtp/ssmtp.conf
+      - ./php_local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      default:
+        ipv4_address: ${NETWORK}.2
+    extra_hosts:
+      - "mail:${NETWORK}.1"
+
+volumes:
+  conf:
+  data:
+  plugins:
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: ${NETWORK}.0/24
